@@ -26,8 +26,7 @@ public class StudentResource {
 
     @GetMapping("library/student/allbooks/{id}")
     public ResponseEntity<List<Carte>> getAllBookByStudent(@PathVariable Long id){
-
-        log.info("REST api for getting all the students books with id {} ",id);
+         log.info("REST api for getting all the students books with id {} ",id);
          List<Carte> bookList=studentService.getAllBooksById(id);
          return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
@@ -39,8 +38,4 @@ public class StudentResource {
         CreateCarteResponseDTO createCarteResponseDTO =CreateCarteResponseDTO.builder().message("Added book").carte(c).build();
         return new ResponseEntity<>(createCarteResponseDTO,HttpStatus.OK);
     }
-
-
-
-
 }

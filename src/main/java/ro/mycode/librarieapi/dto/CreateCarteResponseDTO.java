@@ -11,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class CreateCarteResponseDTO {
-
     private String message;
     private CreateCarteRequestDTO carte;
 }
