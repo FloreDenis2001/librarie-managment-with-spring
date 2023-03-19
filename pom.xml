@@ -14,7 +14,7 @@
 	<name>librarie-api</name>
 	<description>Demo api for library</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
