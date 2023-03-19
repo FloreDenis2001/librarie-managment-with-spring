@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import net.bytebuddy.implementation.bind.annotation.Super;
 import org.hibernate.annotations.LazyCollection;
 
 import javax.persistence.*;
@@ -21,6 +23,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class Student implements Comparable<Student> {
     @Id
     @SequenceGenerator(
@@ -110,6 +113,7 @@ public class Student implements Comparable<Student> {
         return s.password.compareTo(this.getPassword()) == 0;
     }
 
+
     @Override
     public int compareTo(Student o) {
         if (o.getVarsta() > this.getVarsta()) {
@@ -120,6 +124,21 @@ public class Student implements Comparable<Student> {
             return 0;
         }
     }
+
+    public void addBook(Carte book){
+        this.bookList.add(book);
+        book.setStudent(this);
+    }
+
+    public void removeBook(Carte book){
+        this.bookList.remove(book.getId());
+    }
+
+
+    public boolean vfExistsBook(Carte carte){
+        return  this.bookList.contains(carte);
+    }
+
 
 
 

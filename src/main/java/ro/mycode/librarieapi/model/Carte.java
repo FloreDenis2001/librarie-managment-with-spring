@@ -1,12 +1,18 @@
 package ro.mycode.librarieapi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 
@@ -15,6 +21,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class Carte implements Comparable<Carte> {
 
     @Id
@@ -33,7 +40,6 @@ public class Carte implements Comparable<Carte> {
     private String bookName;
 
     @Column(name = "create_at", nullable = false, columnDefinition = "DATE")
-
     private LocalDate createdAt;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
@@ -44,6 +50,7 @@ public class Carte implements Comparable<Carte> {
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "student_id_fk"))
+    @JsonBackReference
     private Student student;
 
 
@@ -61,7 +68,7 @@ public class Carte implements Comparable<Carte> {
     @Override
     public boolean equals(Object o) {
         Carte x = (Carte) o;
-        return x.getStudent() == this.student;
+        return x.bookName.equals(this.bookName);
     }
 
     @Override
