@@ -1,16 +1,20 @@
 package ro.mycode.librarieapi.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import ro.mycode.librarieapi.model.Student;
+
+import java.util.List;
 
 @Data
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-public class CreateCarteResponseDTO {
+public class StudentListResponse {
     private String message;
-    private CreateCarteRequestDTO carte;
+    private List<Student> studentList;
+
+
 }

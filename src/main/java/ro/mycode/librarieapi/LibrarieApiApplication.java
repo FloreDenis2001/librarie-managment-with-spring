@@ -4,12 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import ro.mycode.librarieapi.model.Carte;
-import ro.mycode.librarieapi.model.Student;
 import ro.mycode.librarieapi.repository.StudentRepo;
-
-import java.awt.print.Book;
-import java.time.LocalDate;
 
 @SpringBootApplication
 public class LibrarieApiApplication {

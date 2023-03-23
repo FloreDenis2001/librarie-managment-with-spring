@@ -2,16 +2,15 @@ package ro.mycode.librarieapi.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,116 +30,65 @@ public class Student implements Comparable<Student> {
             sequenceName = "student_sequence",
             allocationSize = 1
     )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence")
+    Long id;
 
-    @GeneratedValue(
-            strategy = SEQUENCE,
-            generator = "student_sequence"
+    @Column(name = "first_name",
+            nullable = false)
+    String firstName;
+
+    @Column(name = "second_name",
+            nullable = false)
+    String secondName;
+
+    @Column(name = "email",
+            nullable = false)
+    @Email
+    String email;
+
+    @DecimalMax(value = "25", message = "Cursul este alocat persoanelor sub 25 de ani")
+    @Column(name = "age",
+            nullable = false)
+    double age;
+
+
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.ALL
+
     )
-
-    @Column(
-            name = "id"
-    )
-    private Long id;
-
-
-    @Column(
-            name = "student_username",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
-    @NotEmpty
-    @Size(min=4,max=10,message ="Numarul minim de caractere este 4")
-
-    private String userName;
-    @Column(
-            name = "student_password",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
-    @NotEmpty
-    @Size(min=8,message = "Numarul minim de caractere este 8")
-    private String password;
-
-    @Column(
-            name = "student_email",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
-    @NotEmpty
-    @Size (min=8,message ="Numarul minim de carcatere este 8")
-    private String email;
-
-    @Column(
-            name = "student_varsta",
-            nullable = false,
-            columnDefinition = "INTEGER"
-    )
-    @NotEmpty
-    @Min(value = 18,message = "Studentul trebuie sa aibe varsta minima de 18 ani")
-    private int varsta;
-
-    @Column(
-            name = "student_phone",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
-    @NotEmpty
-    @Size (min=10,message ="Numarul minim de carcatere este 10")
-    private String phone;
-
-
-    @OneToMany(mappedBy = "student",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference
-    private List<Carte> bookList = new ArrayList<>();
+    @Builder.Default
+    List<Book> books = new ArrayList<>();
+
+
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.setStudent(this);
+    }
+
 
     @Override
     public String toString() {
-        String text = " Id : " + this.id;
-        text += "UserName : " + this.userName;
-        text += "Password : " + this.password;
-        text += "Email : " + this.email;
-        text += "Phone : " + this.phone;
-
-        return text;
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        Student s = (Student) o;
-        return s.password.compareTo(this.getPassword()) == 0;
+
+    public boolean vfExistsBook(Book book) {
+        return this.books.contains(book);
     }
 
 
     @Override
     public int compareTo(Student o) {
-        if (o.getVarsta() > this.getVarsta()) {
-            return 1;
-        } else if (o.getVarsta() < this.getVarsta()) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return 0;
     }
-
-    public void addBook(Carte book){
-        this.bookList.add(book);
-        book.setStudent(this);
-    }
-
-    public void removeBook(Carte book){
-        this.bookList.remove(book.getId());
-    }
-
-
-    public boolean vfExistsBook(Carte carte){
-        return  this.bookList.contains(carte);
-    }
-
-
-
-
-
 }
