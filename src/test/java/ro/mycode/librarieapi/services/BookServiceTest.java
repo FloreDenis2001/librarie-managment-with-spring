@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
+
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
 
@@ -71,6 +72,23 @@ class BookServiceTest {
 
 
     @Test
+    void getAllBooksGraterPriceThanException() {
+        doReturn(Optional.empty()).when(bookRepository).lowestPriceBook(15);
+        assertThrows(EmptyDataBase.class, () -> {
+            bookService.getAllBooksGraterPriceThan(15);
+        });
+    }
+
+    @Test
+    void getAllBooksLowestPriceThanException() {
+        doReturn(Optional.empty()).when(bookRepository).highPriceBook(15);
+        assertThrows(EmptyDataBase.class, () -> {
+            bookService.getAllBooksLowestPriceThan(15);
+        });
+    }
+
+
+    @Test
     void getAllBooksLowestPriceThan() {
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -93,6 +111,14 @@ class BookServiceTest {
     }
 
     @Test
+    void getAllBestBooksException() {
+        doReturn(Optional.empty()).when(bookRepository).bestBooks();
+        assertThrows(EmptyDataBase.class, () -> {
+            bookService.getAllBestBooks();
+        });
+    }
+
+    @Test
     void getAllBooksByStars() {
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -101,5 +127,15 @@ class BookServiceTest {
 
         doReturn(Optional.of(books)).when(bookRepository).filterStarBook(5L);
         assertEquals(5, bookService.getAllBooksByStars(5L).get().size());
+    }
+
+    @Test
+    void getAllBooksByStarsException() {
+
+
+        doReturn(Optional.empty()).when(bookRepository).filterStarBook(5L);
+       assertThrows(EmptyDataBase.class,()->{
+           bookService.getAllBooksByStars(5L);
+       });
     }
 }

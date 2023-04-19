@@ -142,22 +142,22 @@ class StudentServiceTest {
     }
 
 
-//    @Test
-//    void removeBook() {
-//        CreateBookRequest createBookRequest = new CreateBookRequest().builder().idStudent(1L).stars(5L).title("Harry Potter").price(20).author("Flore Denis").build();
-//        Student s = new Student().builder().id(1L).age(21).email("denis@yahoo.com").firstName("Flore").secondName("Denis").build();
-//        Optional<Student> student = Optional.of(s);
-//        doReturn(student).when(studentRepo).findById(createBookRequest.getIdStudent());
-//        Book book = Book.builder().
-//                title(createBookRequest.getTitle()).
-//                author(createBookRequest.getAuthor())
-//                .price(createBookRequest.getPrice()).stars(createBookRequest.getStars()).build();
-//        Optional<Book> bookopt = Optional.of(book);
-//        doReturn(Optional.empty()).when(bookRepository).getBookByStudentAndTitle(createBookRequest.getIdStudent(),createBookRequest.getTitle());
-//        doReturn(bookopt).when(bookRepository).getBookByStudentAndAuthorAndTitle(createBookRequest.getIdStudent(),createBookRequest.getAuthor(), createBookRequest.getTitle());
-//        studentService.addBook(createBookRequest);
-//        studentService.removeBook(createBookRequest);
-//        assertEquals(new ArrayList<>(),student.get().getBooks());
-//    }
+    @Test
+    void removeBook() {
+        Student s = new Student().builder().id(5L).age(21).email("denis@yahoo.com").firstName("Flore").secondName("Denis").build();
+        CreateBookRequest createBookRequest = new CreateBookRequest().builder().idStudent(s.getId()).stars(5L).title("Harry Potter").price(20).author("Flore Denis").build();
+        Optional<Student> student = Optional.of(s);
+        doReturn(student).when(studentRepo).findById(createBookRequest.getIdStudent());
+        Book book = Book.builder().
+                title(createBookRequest.getTitle()).
+                author(createBookRequest.getAuthor())
+                .price(createBookRequest.getPrice()).stars(createBookRequest.getStars()).build();
+        Optional<Book> bookopt = Optional.of(book);
+        doReturn(bookopt).when(bookRepository).getBookByStudentAndAuthorAndTitle(createBookRequest.getIdStudent(),createBookRequest.getAuthor(), createBookRequest.getTitle());
+        studentService.addBook(createBookRequest);
+        doNothing().when(bookRepository).removeBookByStudentAndTitle(createBookRequest.getIdStudent(),createBookRequest.getTitle());
+        studentService.removeBook(createBookRequest);
+        assertEquals(new ArrayList<>(),student.get().getBooks());
+    }
 
 }
